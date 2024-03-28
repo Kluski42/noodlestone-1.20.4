@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "noodlestone:block/power_dropper_vertical",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "noodlestone:block/power_dropper",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "noodlestone:block/power_dropper"
+    },
+    "facing=south": {
+      "model": "noodlestone:block/power_dropper",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "noodlestone:block/power_dropper_vertical"
+    },
+    "facing=west": {
+      "model": "noodlestone:block/power_dropper",
+      "y": 270
+    }
+  }
+}

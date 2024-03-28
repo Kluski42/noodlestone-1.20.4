@@ -13,11 +13,15 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+import wetnoodle.noodlestone.block.FanBlock;
 import wetnoodle.noodlestone.block.PowerDropperBlock;
 
 public class NSBlocks {
     public static final Block POWER_DROPPER = registerBlock("power_dropper",
             new PowerDropperBlock(FabricBlockSettings.copyOf(Blocks.DROPPER)), ItemGroups.REDSTONE);
+
+    public static final Block FAN_BLOCK = registerBlock("copper_fan",
+            new FanBlock(FabricBlockSettings.copyOf(Blocks.QUARTZ_BLOCK).nonOpaque()), ItemGroups.REDSTONE);
 
     private static Block registerBlock(String name, Block block, RegistryKey<ItemGroup> itemGroup) {
         registerBlockItem(name, block, itemGroup);

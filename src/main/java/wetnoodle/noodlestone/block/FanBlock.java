@@ -1,9 +1,10 @@
 package wetnoodle.noodlestone.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FacingBlock;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
@@ -11,14 +12,19 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+import wetnoodle.noodlestone.block.entity.FanBlockEntity;
+import wetnoodle.noodlestone.block.entity.NSBlockEntityType;
 
 public class FanBlock
-        extends FacingBlock {
+        extends BlockWithEntity {
     public static final MapCodec<FanBlock> CODEC = createCodec(FanBlock::new);
+    public static final DirectionProperty FACING = FacingBlock.FACING;
     public static final BooleanProperty POWERED = Properties.POWERED;
     public static final BooleanProperty BLOWING = BooleanProperty.of("blowing");
 
@@ -66,5 +72,29 @@ public class FanBlock
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(FACING, POWERED, BLOWING);
+    }
+
+    /**
+     * {@return a new fan block entity instance}
+     *
+     * @param pos
+     * @param state
+     * @implNote While this is marked as nullable, in practice this should never return
+     * {@code null}. {@link PistonExtensionBlock} is the only block in vanilla that
+     * returns {@code null} inside the implementation.
+     */
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new FanBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return FanBlock.validateTicker(type, NSBlockEntityType.FAN_BLOCK_ENTITY, world.isClient ? FanBlockEntity::clientTick : FanBlockEntity::serverTick);
+//        if (world.isClient()) return null;
+//        if (type != NSBlockEntityType.FAN_BLOCK_ENTITY) return null;
+//        return FanBlockEntity::tick;
     }
 }

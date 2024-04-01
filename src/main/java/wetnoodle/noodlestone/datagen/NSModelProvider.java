@@ -21,6 +21,7 @@ public class NSModelProvider extends FabricModelProvider {
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
         blockStateModelGenerator.registerDispenserLikeOrientable(NSBlocks.POWER_DROPPER);
+        registerFacingPoweredBlock(blockStateModelGenerator, NSBlocks.FAN_BLOCK);
     }
 
     private void registerFacingPoweredBlock(BlockStateModelGenerator blockStateModelGenerator, Block block) {
@@ -28,6 +29,7 @@ public class NSModelProvider extends FabricModelProvider {
         Identifier onIdentifier = ModelIds.getBlockSubModelId(block, "_on");
         blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
                 .coordinate(BlockStateModelGenerator.createBooleanModelMap(Properties.POWERED, onIdentifier, offIdentifier))
+//                .coordinate(BlockStateModelGenerator.createBooleanModelMap(FanBlock.BLOWING, onIdentifier, offIdentifier))
                 .coordinate(BlockStateModelGenerator.createNorthDefaultRotationStates()));
     }
 

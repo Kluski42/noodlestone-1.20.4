@@ -1,4 +1,6 @@
-// 1.20.4	2024-03-28T12:30:55.7946342	Noodlestone/Model Definitions
+// 1.20.4	2024-04-01T14:43:22.3745421	Noodlestone/Model Definitions
+ac20f9fe05554ddf183dc83e378624d028824f8d assets\noodlestone\blockstates\copper_fan.json
+fcc5c3ea95eac4774dc639cb6d2beed7e43b72b8 assets\noodlestone\models\item\copper_fan.json
 89337bd2c73a550ac16358538f5609dd4222b801 assets\noodlestone\models\block\power_dropper.json
 c0ab2e67f904386d1d029a0365c040471b229ccc assets\noodlestone\models\item\power_dropper.json
 284aa4400e8e3a213d3d5cd914e495ce57608434 assets\noodlestone\blockstates\power_dropper.json

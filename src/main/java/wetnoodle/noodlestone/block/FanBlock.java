@@ -93,8 +93,10 @@ public class FanBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return FanBlock.validateTicker(type, NSBlockEntityType.FAN_BLOCK_ENTITY, world.isClient ? FanBlockEntity::clientTick : FanBlockEntity::serverTick);
-//        if (world.isClient()) return null;
-//        if (type != NSBlockEntityType.FAN_BLOCK_ENTITY) return null;
-//        return FanBlockEntity::tick;
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }

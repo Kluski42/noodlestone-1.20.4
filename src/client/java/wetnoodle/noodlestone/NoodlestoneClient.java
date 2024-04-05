@@ -7,6 +7,6 @@ import net.minecraft.client.render.RenderLayer;
 public class NoodlestoneClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        BlockRenderLayerMap.INSTANCE.putBlock(NSBlocks.FAN_BLOCK, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(NSBlocks.COPPER_FAN, RenderLayer.getCutout());
     }
 }

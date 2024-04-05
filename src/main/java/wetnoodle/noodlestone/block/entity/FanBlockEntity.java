@@ -3,30 +3,28 @@ package wetnoodle.noodlestone.block.entity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import wetnoodle.noodlestone.block.FanBlock;
+import wetnoodle.noodlestone.block.fan.FanBlock;
 
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 public class FanBlockEntity
         extends BlockEntity {
 
-    private static final int TEMP_STR = 15;
     private static final double PUSH_CONST = 0.05;
+    private int strength;
 
     public FanBlockEntity(BlockPos pos, BlockState state) {
         super(NSBlockEntityType.FAN_BLOCK_ENTITY, pos, state);
     }
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, FanBlockEntity blockEntity) {
-
-    }
-
-    public static void serverTick(World world, BlockPos pos, BlockState state, FanBlockEntity blockEntity) {
+    public static void tick(World world, BlockPos pos, BlockState state, FanBlockEntity blockEntity) {
         if (state.get(FanBlock.BLOWING)) {
             pushEntities(world, pos, state, blockEntity);
         }
@@ -35,11 +33,18 @@ public class FanBlockEntity
     // Main actions:
     private static void pushEntities(World world, BlockPos pos, BlockState state, FanBlockEntity blockEntity) {
         Direction facing = state.get(FanBlock.FACING);
-        Box box = getWindBox(pos, facing, TEMP_STR);
-        List<Entity> entities = world.getNonSpectatingEntities(Entity.class, box);
+        Box windBox = getWindBox(pos, facing, blockEntity.getStrength());
+        List<Entity> entities = world.getNonSpectatingEntities(Entity.class, windBox);
         if (entities.isEmpty()) return;
         for (Entity entity : entities) {
-            entity.addVelocity(pushForce(pos, facing, entity));
+            if (entity.isLogicalSideForUpdatingMovement()) {
+                if (entity instanceof PlayerEntity playerEntity) {
+                    if (playerEntity.getAbilities().flying) continue;
+                }
+                if (!isObstructed(world, pos, entity)) {
+                    entity.addVelocity(pushForce(pos, facing, entity, windBox, blockEntity.getStrength()));
+                }
+            }
         }
     }
 
@@ -62,9 +67,61 @@ public class FanBlockEntity
         return Math.abs(distance.getZ());
     }
 
-    private static Vec3d pushForce(BlockPos pos, Direction facing, Entity entity) {
+    private static Vec3d pushForce(BlockPos pos, Direction facing, Entity entity, Box windBox, int fanStr) {
         double distance = getDistance(pos, facing.getAxis(), entity);
-        double force = PUSH_CONST * TEMP_STR / (distance + 2);
+        double percentageBlown = getPercentageBlown(entity, windBox, facing.getAxis());
+        double force = PUSH_CONST * percentageBlown * fanStr / (distance + 2);
         return Vec3d.of(facing.getVector()).multiply(force);
+    }
+
+    private static boolean isObstructed(World world, BlockPos blockPos, Entity entity) {
+        return false;
+    }
+
+    /**
+     * As the windBox is always 1x1, the overlap area should <= 1.
+     *
+     * @return The area of the intersection between the wind column's face and the entity's nearest face.
+     */
+    private static double getOverlapArea(Rectangle2D entityFace, Box windBox, Direction.Axis axis) {
+        Rectangle2D windFace = getFace(windBox, axis);
+//        Rectangle2D entityFace = getFace(entity.getBoundingBox(), axis);
+        Rectangle2D intersection = windFace.createIntersection(entityFace);
+        return intersection.getWidth() * intersection.getHeight();
+    }
+
+    private static double getPercentageBlown(Entity entity, Box windBox, Direction.Axis axis) {
+        Rectangle2D entityFace = getFace(entity.getBoundingBox(), axis);
+        double overlapArea = getOverlapArea(entityFace, windBox, axis);
+        double faceArea = entityFace.getWidth() * entityFace.getWidth();
+        return overlapArea / faceArea;
+    }
+
+    /**
+     * Gets the box's face on an axis
+     *
+     * @return box's face on an axis
+     */
+    private static Rectangle2D.Double getFace(Box box, Direction.Axis axis) {
+        Direction.Axis[] axi;
+        axi = switch (axis) {
+            case X -> new Direction.Axis[]{Direction.Axis.Y, Direction.Axis.Z};
+            case Y -> new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Z};
+            case Z -> new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Y};
+        };
+        double length1 = box.getMax(axi[0]) - box.getMin(axi[0]);
+        double length2 = box.getMax(axi[1]) - box.getMin(axi[1]);
+        return new Rectangle2D.Double(box.getMin(axi[0]), box.getMin(axi[1]), length1, length2);
+    }
+
+    // Getters setters
+
+
+    private int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
     }
 }

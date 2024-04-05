@@ -1,0 +1,6 @@
+{
+  "parent": "noodlestone:block/copper_fan",
+  "textures": {
+    "front": "noodlestone:block/exposed_copper_fan_front_on"
+  }
+}

@@ -1,4 +1,4 @@
-package wetnoodle.noodlestone.block;
+package wetnoodle.noodlestone.block.fan;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import wetnoodle.noodlestone.NSBlocks;
 import wetnoodle.noodlestone.block.entity.FanBlockEntity;
 import wetnoodle.noodlestone.block.entity.NSBlockEntityType;
 
@@ -86,17 +87,24 @@ public class FanBlock
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new FanBlockEntity(pos, state);
+        int str = 0;
+        if (state.isOf(NSBlocks.COPPER_FAN)) str = 15;
+        if (state.isOf(NSBlocks.EXPOSED_COPPER_FAN)) str = 12;
+        if (state.isOf(NSBlocks.WEATHERED_COPPER_FAN)) str = 8;
+        if (state.isOf(NSBlocks.OXIDIZED_COPPER_FAN)) str = 4;
+        FanBlockEntity fan = new FanBlockEntity(pos, state);
+        fan.setStrength(str);
+        return fan;
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return FanBlock.validateTicker(type, NSBlockEntityType.FAN_BLOCK_ENTITY, world.isClient ? FanBlockEntity::clientTick : FanBlockEntity::serverTick);
+        return FanBlock.validateTicker(type, NSBlockEntityType.FAN_BLOCK_ENTITY, FanBlockEntity::tick);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderType(BlockState state) {    
         return BlockRenderType.MODEL;
     }
 }

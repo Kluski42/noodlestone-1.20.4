@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "b": {
+      "item": "minecraft:blaze_rod"
+    },
+    "c": {
+      "item": "minecraft:waxed_oxidized_copper"
+    },
+    "g": {
+      "item": "minecraft:waxed_oxidized_copper_grate"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "gig",
+    "cbc",
+    "crc"
+  ],
+  "result": {
+    "item": "noodlestone:waxed_oxidized_copper_fan"
+  }
+}

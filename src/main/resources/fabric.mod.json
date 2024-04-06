@@ -3,14 +3,16 @@
 	"id": "noodlestone",
 	"version": "${version}",
 	"name": "Noodlestone",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A mod with a bunch of silly redstone stuff :3",
 	"authors": [
-		"Me!"
+		"Wet Noodle"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"discord": "wet.noodle"
 	},
+	"contributors": [
+		"NL Morrison"
+	],
 	"license": "CC0-1.0",
 	"icon": "assets/noodlestone/icon.png",
 	"environment": "*",

@@ -15,10 +15,7 @@ import wetnoodle.noodlestone.block.entity.FanBlockEntity;
 public class OxidizableFanBlock
         extends FanBlock
         implements Oxidizable {
-    public static final MapCodec<OxidizableFanBlock> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
-        return instance.group(OxidationLevel.CODEC.fieldOf("weathering_state").forGetter(OxidizableFanBlock::getDegradationLevel), createSettingsCodec()).apply(instance, OxidizableFanBlock::new);
-    });
-
+    public static final MapCodec<OxidizableFanBlock> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(OxidationLevel.CODEC.fieldOf("weathering_state").forGetter(OxidizableFanBlock::getDegradationLevel), createSettingsCodec()).apply(instance, OxidizableFanBlock::new));
     private final OxidationLevel oxidationLevel;
 
     protected MapCodec<OxidizableFanBlock> getCodec() {
@@ -60,12 +57,6 @@ public class OxidizableFanBlock
     public boolean hasRandomTicks(BlockState state) {
         return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
     }
-
-//    @Nullable
-//    @Override
-//    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-//        return FanBlock.validateTicker(type, NSBlockEntityType.FAN_BLOCK_ENTITY, FanBlockEntity::tick);
-//    }
 
     @Override
     public OxidationLevel getDegradationLevel() {

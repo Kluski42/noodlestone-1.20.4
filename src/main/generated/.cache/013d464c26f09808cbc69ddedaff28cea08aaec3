@@ -1,4 +1,4 @@
-// 1.20.4	2024-04-01T21:57:55.853638	Noodlestone/Model Definitions
+// 1.20.4	2024-04-06T15:19:09.1383053	Noodlestone/Model Definitions
 82b738e35f27d68b2489eab6f5588db6a39bb3ce assets\noodlestone\models\item\waxed_weathered_copper_fan.json
 ca2bc4fd6af8b1856272f29c5c28495b14e931de assets\noodlestone\models\item\waxed_copper_fan.json
 fcc5c3ea95eac4774dc639cb6d2beed7e43b72b8 assets\noodlestone\models\item\copper_fan.json
@@ -7,8 +7,8 @@ fcc5c3ea95eac4774dc639cb6d2beed7e43b72b8 assets\noodlestone\models\item\copper_f
 03f1c16a69914515f7fc5e8fc8a12d86986decbb assets\noodlestone\models\item\waxed_exposed_copper_fan.json
 3d4fde0f310693ad8ba1180db9abb88fa3994e52 assets\noodlestone\models\block\power_dropper_vertical.json
 9ffa3a09f03bfef822a71825bbaa4e2bca8af6ac assets\noodlestone\blockstates\exposed_copper_fan.json
-ac20f9fe05554ddf183dc83e378624d028824f8d assets\noodlestone\blockstates\copper_fan.json
 9ffa3a09f03bfef822a71825bbaa4e2bca8af6ac assets\noodlestone\blockstates\waxed_exposed_copper_fan.json
+ac20f9fe05554ddf183dc83e378624d028824f8d assets\noodlestone\blockstates\copper_fan.json
 d11f7b93f26337bf63ed0d6fd271a4b85ef7a754 assets\noodlestone\models\item\waxed_oxidized_copper_fan.json
 ac20f9fe05554ddf183dc83e378624d028824f8d assets\noodlestone\blockstates\waxed_copper_fan.json
 c0ab2e67f904386d1d029a0365c040471b229ccc assets\noodlestone\models\item\power_dropper.json

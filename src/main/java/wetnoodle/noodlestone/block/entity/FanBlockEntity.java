@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -42,7 +43,13 @@ public class FanBlockEntity
                     if (playerEntity.getAbilities().flying) continue;
                 }
                 if (!isObstructed(world, pos, entity)) {
-                    entity.addVelocity(pushForce(pos, facing, entity, windBox, blockEntity.getStrength()));
+                    Vec3d force = pushForce(pos, facing, entity, windBox, blockEntity.getStrength());
+                    entity.addVelocity(force);
+                    entity.limitFallDistance();
+                    // check if grounded
+//                    if (!force.equals(Vec3d.ZERO) && entity.collidesWithStateAtPos(pos, state)) {
+//                        entity.setOnGround(true, force);
+//                    }
                 }
             }
         }
@@ -71,6 +78,11 @@ public class FanBlockEntity
         double distance = getDistance(pos, facing.getAxis(), entity);
         double percentageBlown = getPercentageBlown(entity, windBox, facing.getAxis());
         double force = PUSH_CONST * percentageBlown * fanStr / (distance + 2);
+        // This allows entities to walk on weaker fans
+        // This currently doesn't work when landing on a fan with an elytra
+        if (force < 0.15 && entity.isOnGround()) {
+            return Vec3d.ZERO;
+        }
         return Vec3d.of(facing.getVector()).multiply(force);
     }
 
@@ -114,14 +126,28 @@ public class FanBlockEntity
         return new Rectangle2D.Double(box.getMin(axi[0]), box.getMin(axi[1]), length1, length2);
     }
 
+    // NBT
+    @Override
+    protected void writeNbt(NbtCompound nbt) {
+        // Save the current value of the strength to the nbt
+        nbt.putInt("strength", strength);
+        super.writeNbt(nbt);
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+
+        strength = nbt.getInt("strength");
+    }
+
     // Getters setters
-
-
     private int getStrength() {
         return strength;
     }
 
     public void setStrength(int strength) {
         this.strength = strength;
+        markDirty();
     }
 }
